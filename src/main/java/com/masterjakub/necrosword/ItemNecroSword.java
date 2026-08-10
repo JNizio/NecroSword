@@ -18,29 +18,32 @@ public class ItemNecroSword extends ItemSword {
 
         if (!target.worldObj.isRemote && target.worldObj instanceof WorldServer) {
             WorldServer world = (WorldServer) target.worldObj;
+            double y = target.posY + target.height * 0.5D;
 
+            // Keep the effect deliberately light for old 1.7.10 clients while
+            // still producing an obvious dark smoke burst around the target.
             world.func_147487_a(
                 "largesmoke",
                 target.posX,
-                target.posY + target.height * 0.55D,
+                y,
                 target.posZ,
-                24,
-                0.35D,
-                0.50D,
-                0.35D,
-                0.015D
+                10,
+                0.30D,
+                0.40D,
+                0.30D,
+                0.012D
             );
 
             world.func_147487_a(
                 "smoke",
                 target.posX,
-                target.posY + target.height * 0.45D,
+                y,
                 target.posZ,
-                18,
-                0.28D,
-                0.42D,
-                0.28D,
-                0.025D
+                8,
+                0.24D,
+                0.34D,
+                0.24D,
+                0.018D
             );
         }
 
