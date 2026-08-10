@@ -8,8 +8,8 @@ A small Forge 1.7.10 mod adding the **Necro Sword**.
 - 1800 durability
 - 8 base melee damage
 - +4 bonus necrotic damage on melee hit
-- Dark smoke burst around struck enemies
-- Native 1.7.10 16x16 item texture
+- Dark vanilla smoke + large-smoke particles erupt around struck enemies
+- Native 16x16 Minecraft 1.7.10 item texture
 
 ## Target
 
@@ -18,16 +18,18 @@ A small Forge 1.7.10 mod adding the **Necro Sword**.
 - Java 8
 - anatawa12 ForgeGradle 1.2 fork
 
-## Build
+## Building
 
-The GitHub Actions workflow builds the mod automatically on pushes to `main` and uploads the compiled JAR from `build/libs`.
+GitHub Actions builds the mod automatically on pushes to `main`.
 
-Local build (Java 8):
+For a local build with Java 8, install Gradle 7.4.2 and run:
 
 ```bash
-./gradlew SetupCIWorkspace build
+gradle SetupCIWorkspace build
 ```
 
-Expected release jar:
+The compiled mod is:
 
 `build/libs/NecroSword-1.7.10-1.0.0.jar`
+
+The repository stores the tiny PNG as Base64 text because the connected repository writer is text-oriented. The Gradle `generateTexture` task reconstructs `necro_sword.png` before `processResources`, so the final JAR contains a normal Minecraft texture at `assets/necrosword/textures/items/necro_sword.png`.

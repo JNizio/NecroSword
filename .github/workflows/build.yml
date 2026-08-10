@@ -1,0 +1,44 @@
+name: Build Forge 1.7.10 Mod
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Download Gradle 7.4.2
+        run: |
+          curl -L --retry 3 -o /tmp/gradle.zip https://services.gradle.org/distributions/gradle-7.4.2-bin.zip
+          unzip -q /tmp/gradle.zip -d /tmp
+
+      - name: Build Necro Sword
+        run: /tmp/gradle-7.4.2/bin/gradle SetupCIWorkspace build --no-daemon --stacktrace
+
+      - name: Verify JAR
+        run: |
+          test -f build/libs/NecroSword-1.7.10-1.0.0.jar
+          jar tf build/libs/NecroSword-1.7.10-1.0.0.jar | grep -q 'com/masterjakub/necrosword/NecroSwordMod.class'
+          jar tf build/libs/NecroSword-1.7.10-1.0.0.jar | grep -q 'assets/necrosword/textures/items/necro_sword.png'
+
+      - name: Upload mod JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: NecroSword-1.7.10-1.0.0
+          path: build/libs/NecroSword-1.7.10-1.0.0.jar
+          if-no-files-found: error

@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "necrosword",
+    "name": "Necro Sword",
+    "description": "Adds the Necro Sword, a dark weapon that erupts in black smoke and deals bonus necrotic damage when it hits an enemy.",
+    "version": "${version}",
+    "mcversion": "1.7.10",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["Master Jakub"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

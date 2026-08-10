@@ -1,0 +1,65 @@
+import java.util.Base64
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "https://maven.minecraftforge.net/"
+        }
+    }
+    dependencies {
+        classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.1.+') {
+            changing = true
+        }
+    }
+}
+
+apply plugin: 'forge'
+
+version = "1.0.0"
+group = "com.masterjakub.necrosword"
+archivesBaseName = "NecroSword-1.7.10"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+minecraft {
+    version = "1.7.10-10.13.4.1614-1.7.10"
+    runDir = "run"
+}
+
+def generatedResources = file("$buildDir/generated-resources")
+def encodedTexture = file("src/main/resources-src/necro_sword.png.b64")
+def generatedTexture = file("$buildDir/generated-resources/assets/necrosword/textures/items/necro_sword.png")
+
+task generateTexture {
+    inputs.file encodedTexture
+    outputs.file generatedTexture
+    doLast {
+        generatedTexture.parentFile.mkdirs()
+        generatedTexture.bytes = Base64.decoder.decode(encodedTexture.text.trim())
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir generatedResources
+        }
+    }
+}
+
+processResources {
+    dependsOn generateTexture
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    filesMatching('mcmod.info') {
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
