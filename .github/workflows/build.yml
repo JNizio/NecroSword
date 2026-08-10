@@ -32,13 +32,18 @@ jobs:
 
       - name: Verify JAR
         run: |
-          test -f build/libs/NecroSword-1.7.10-1.0.0.jar
-          jar tf build/libs/NecroSword-1.7.10-1.0.0.jar | grep -q 'com/masterjakub/necrosword/NecroSwordMod.class'
-          jar tf build/libs/NecroSword-1.7.10-1.0.0.jar | grep -q 'assets/necrosword/textures/items/necro_sword.png'
+          JAR=build/libs/NecroSword-1.7.10-1.0.1.jar
+          test -f "$JAR"
+          jar tf "$JAR" | grep -q 'com/masterjakub/necrosword/NecroSwordMod.class'
+          jar tf "$JAR" | grep -q 'assets/necrosword/textures/items/necro_sword.png'
+          if jar tf "$JAR" | grep -Eq '^(org/lwjgl|paulscode)/'; then
+            echo 'ERROR: client audio/LWJGL classes must never be bundled in this mod jar'
+            exit 1
+          fi
 
       - name: Upload mod JAR
         uses: actions/upload-artifact@v4
         with:
-          name: NecroSword-1.7.10-1.0.0
-          path: build/libs/NecroSword-1.7.10-1.0.0.jar
+          name: NecroSword-1.7.10-1.0.1
+          path: build/libs/NecroSword-1.7.10-1.0.1.jar
           if-no-files-found: error
