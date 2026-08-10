@@ -13,8 +13,12 @@ public class NecroCombatHandler {
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
         Entity source = event.source.getEntity();
+        Entity directSource = event.source.getSourceOfDamage();
 
-        if (!(source instanceof EntityLivingBase)) {
+        // Only boost a direct melee hit. This prevents arrows, reflected damage,
+        // and other indirect attacks from receiving the bonus just because the
+        // attacker happens to be holding the Necro Sword.
+        if (!(source instanceof EntityLivingBase) || directSource != source) {
             return;
         }
 
